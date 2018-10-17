@@ -64,4 +64,6 @@ Method <- expand.grid(dim = c(10),
                         verbose = FALSE,
                         method = c("Rejection", "Construction"))
 
-rbind(Dim, Sub, Mar, Num, Prop, Proptype, Method)
+res <- rbind(Dim, Sub, Mar, Num, Prop, Proptype, Method)
+rm(Dim, Sub, Mar, Num, Prop, Proptype, Method)
+res
