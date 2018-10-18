@@ -55,14 +55,14 @@ Proptype <- expand.grid(dim = c(10),
                    verbose = FALSE,
                    method = "Construction")
 Method <- expand.grid(dim = c(10),
-                        dependency = dependency,
-                        subspaceslist = list(c(1:3)),
-                        marginslist = list(c(0.9)),
-                        n = 10000,
-                        prop = 0.05,
-                        proptype = "proportional",
-                        verbose = FALSE,
-                        method = c("Rejection", "Construction"))
+                   dependency = dependency,
+                   subspaceslist = list(c(1:3)),
+                   marginslist = list(c(0.9)),
+                   n = 10000,
+                   prop = 0.05,
+                   proptype = "proportional",
+                   verbose = FALSE,
+                   method = c("Rejection", "Construction"))
 
 res <- rbind(Dim, Sub, Mar, Num, Prop, Proptype, Method)
 rm(Dim, Sub, Mar, Num, Prop, Proptype, Method)
