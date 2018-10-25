@@ -3,5 +3,6 @@
 .RData
 .Ruserdata
 data/*
+selected_data/*
 registry*
 *.log
