@@ -29,6 +29,7 @@ if(!dir.exists("registry")) {
   reg$cluster.functions <- makeClusterFunctionsSocket(ncpus = cores-1)
 }
 loginfo("Got registry.")
+options(batchtools.progress = FALSE)
 
 staticFun <- function(dim,
                 dependency,
@@ -39,7 +40,11 @@ staticFun <- function(dim,
                 proptype,
                 verbose,
                 method) {
-  if(dependency == "Sine" && max(subspaceslist) > 3) return(TRUE)
+  print(paste(max(unlist(subspaceslist))))
+  if(dependency %in% c("Cross", "Hourglass", "Sine") && max(unlist(subspaceslist)) > 3) {
+    sprintf("Skipping %s dependency for max(subspace) > 3.", dependency)
+    return(TRUE)
+  }
   conf <- streamgenerator::generate.stream.config(dim = dim,
                                                   nstep=1,
                                                   maxdim = max(subspaceslist))
@@ -61,6 +66,8 @@ staticFun <- function(dim,
                       prop * 100,
                       substring(method, 1, 3),
                       j)
+    # skip the generation if already exists; the same settings would be used again
+    if (dir.exists(paste("data/", prefix, sep="", collapse = " "))) return(TRUE)
     print(prefix)
     stream <- streamgenerator::generate.static.stream(n = n,
                                                       prop = prop,
@@ -68,13 +75,10 @@ staticFun <- function(dim,
                                                       stream.config = conf, 
                                                       verbose = verbose,
                                                       method = method)
-    
-    
     dir.create(paste("data/", prefix, sep="", collapse = " "), showWarnings = TRUE)
     setwd(paste("data/", prefix, sep="", collapse = " "))
     streamgenerator::output.stream(stream, prefix)
     setwd("../..")
-    prefix <- ""
     j <- j+1
   }
 }
@@ -91,13 +95,17 @@ dynamicFun <- function(dim,
                       volatility,
                       cycle,
                       nstep) {
-  if(dependency == "Sine" && max(subspaceslist) > 3) return(TRUE)
+  if(dependency %in% c("Cross", "Hourglass", "Sine") && max(unlist(subspaceslist)) > 3) {
+    sprintf("Skipping %s dependency for max(subspace) > 3.", dependency)
+    return(TRUE)
+  }
+  if(cycle > nstep/2.0) nstep <- 2 * cycle
   j <- 1
   while(j < 6) {
     
     conf <- streamgenerator::generate.stream.config(dim = dim,
                                                     mindim = 2,
-                                                    maxdim = 5,
+                                                    maxdim = max(unlist(subspaceslist)),
                                                     nstep = nstep, 
                                                     cycle = cycle,
                                                     volatility = volatility,
@@ -119,6 +127,8 @@ dynamicFun <- function(dim,
                       nstep,
                       substring(method, 1, 3),
                       j)
+    # skip the generation if already exists; the same settings would be used again
+    if (dir.exists(paste("data/", prefix, sep="", collapse = " "))) return(TRUE)
     print(prefix)
     stream <- streamgenerator::generate.dynamic.stream(n = n,
                                                       prop = prop,
@@ -126,8 +136,7 @@ dynamicFun <- function(dim,
                                                       stream.config = conf, 
                                                       verbose = verbose,
                                                       method = method)
-    
-   
+
     dir.create(paste("data/", prefix, sep="", collapse = " "), showWarnings = TRUE)
     setwd(paste("data/", prefix, sep="", collapse = " "))
     streamgenerator::output.stream(stream, prefix)
@@ -141,18 +150,15 @@ dynamicFun <- function(dim,
 
 loginfo("Create parameters for static data streams.")
 staticParams <- data.frame()
-dependencyList <- c("Linear",
-                    "Wall",
-                    "Square",
-                    "Donut",
-                    "Cross",
-                    "Hourglass",
+dependencyList <- c("Linear", "Wall", "Square",
+                    "Donut", "Cross", "Hourglass",
                     "Sine")
 for(i in dependencyList) {
   dependency <- i
   result <- source("generation/staticStreamConfigs.R")
   staticParams <- rbind(staticParams, result$value)
 }
+staticParams <- unique(staticParams)
 loginfo("Created static parameters.")
 
 
@@ -160,8 +166,9 @@ loginfo("Clearing registry from provious jobs.")
 clearRegistry()
 loginfo("Creating jobs for static streams.")
 staticIds <- batchMap(staticFun, args = staticParams, reg = reg)
+staticIds[, chunk := chunk(x = job.id, n.chunks = 10)]
 loginfo("Submitting jobs for static streams.")
-submitJobs(reg=reg)
+submitJobs(ids = staticIds, reg=reg)
 waitForJobs(ids = staticIds)
 loginfo("Done with jobs for static streams.")
 
@@ -174,15 +181,19 @@ for(i in dependencyList) {
   result <- source("generation/dynamicStreamConfigs.R")
   dynamicParams <- rbind(dynamicParams, result$value)
 }
+dynamicParams <- unique(dynamicParams)
 loginfo("Created dynamic parameters.")
+
 loginfo("Clearing registry from provious jobs.")
 clearRegistry()
 loginfo("Creating jobs for dynamic streams.")
 dynamicIds <- batchMap(dynamicFun, args = dynamicParams, reg = reg) 
+dynamicIds[, chunk := chunk(x = job.id, n.chunks = 10)]
 loginfo("Submitting jobs for dynamic streams.")
-submitJobs(reg=reg)
+submitJobs(ids = dynamicIds, reg=reg)
 waitForJobs(ids = dynamicIds)
 loginfo("Done with jobs for dynamic streams.")
+
 
 loginfo("Done with the data stream generation.")
 

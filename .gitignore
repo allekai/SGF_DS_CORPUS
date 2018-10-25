@@ -3,5 +3,5 @@
 .RData
 .Ruserdata
 data/*
-registry*
+registry/*
 *.log
