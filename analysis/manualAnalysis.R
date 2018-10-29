@@ -149,7 +149,7 @@ experiment.static <- function(dep, variable) {
                                                            nstep = 1)
   n.static.conf$subspaces <- list(1:3)
   n.static.conf$margins <- 0.9
-  num.reps <- 10
+  num.reps <- 5
   if (variable == "n") {
     list <- as.list(seq(1000, 10000, 1000))
     static.times <- getTimings.n(n.static.conf = n.static.conf, list.n = list, num.reps = num.reps)
@@ -202,7 +202,7 @@ stopCluster(cl)
 time.frame.n <- do.call(rbind.data.frame, lapply(result.list.n, function(x) x[[1]]))
 time.frame.n.melt <- melt(time.frame.n, id.vars = "Dependency")
 
-static.n.plot <- ggplot(data = time.frame.n.melt, mapping = aes(x = variable, y = value, group = Dependency,color = Dependency)) +
+static.n.plot <- ggplot(data = time.frame.n.melt, mapping = aes(x = variable, y = value, group = Dependency, color = Dependency)) +
   geom_line(size=0.8) +
   xlab("n") +
   ylab("Time in seconds")
