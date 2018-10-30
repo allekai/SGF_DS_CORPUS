@@ -6,3 +6,4 @@ data/*
 registry/*
 selected_data/*
 *.log
+analysis/registry/*
