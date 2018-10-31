@@ -137,7 +137,7 @@ experiment.static <- function(dep, variable) {
       n.static.log.raw <- tic.log(format = F)
       tic.clearlog()
       static.timings.list[[i]] <- unlist(lapply(n.static.log.raw, function(x) x$toc - x$tic))
-      names[[i]] <- paste("Margin=", list.ov[[i]], sep = "")
+      names[[i]] <- paste("Outlier Proportion=", list.ov[[i]], sep = "")
     }
     df <- data.frame(static.timings.list)
     names(df) <- names
@@ -265,7 +265,7 @@ time.frame.ov.melt <- melt(time.frame.ov, id.vars = "Dependency")
 
 static.ov.plot <- ggplot(data = time.frame.ov.melt, mapping = aes(x = variable, y = value, group = Dependency,color = Dependency)) +
   geom_line(size=0.8) +
-  xlab("Margin") +
+  xlab("Proportion of outlier") +
   ylab("Time in seconds")
 ggsave(filename = "StaticGenerationTimesOV.pdf", plot = static.ov.plot, device = "pdf", path = "analysis/plots/", dpi = 300) 
 
