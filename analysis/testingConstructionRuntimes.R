@@ -20,7 +20,9 @@ makeBenchmarkPlot.isInHiddenSpace <- function(subspaces = list(1:2),
   for (dep in dependency.list) {
     f <- get(paste("isInHiddenSpace.", dep, sep=""))
     for (i in 1:length(subspaces)){
+      print(sprintf("Current dep %s with dim %i", dep, max(subspaces[[i]])))
       x <- runif(n = length(subspaces[[i]]))
+      if (dep %in% c("Cross", "Hourglass") && i > 5) times <- 5
       results.mbm[[dep]][[i]] <- microbenchmark(f(row = x, subspace = i), unit = unit, times = times)
       results.mean[[dep]][[i]] <- summary(results.mbm[[dep]][[i]])$median
     }
@@ -41,28 +43,29 @@ makeBenchmarkPlot.isInHiddenSpace <- function(subspaces = list(1:2),
 }
 
 
-subspaces <- list(1:2, 1:3, 1:4, 1:5, 1:6, 1:7, 1:8, 1:9, 1:10)
+subspaces <- list(1:2, 1:250, 1:500, 1:750, 1:1000)
 margins <- rep(x = 0.9, times = length(subspaces))
 dependency.list <- c("Linear", "Wall", "Square", "Donut")
-plot.iihs.quick <- makeBenchmarkPlot.isInHiddenSpace(subspaces = subspaces, margins = margins,
+system.time(plot.iihs.quick <- makeBenchmarkPlot.isInHiddenSpace(subspaces = subspaces, margins = margins,
                                                 dependency.list = dependency.list, unit = "us",
-                                                times = 500)
+                                                times = 200))
+plot.iihs.quick
 
-
-subspaces <- list(1:2, 1:3, 1:4, 1:5, 1:6, 1:7)#, 1:8, 1:9, 1:10)
+subspaces <- list(1:2, 1:3, 1:4, 1:5, 1:6, 1:7,1:8, 1:9, 1:10)#, 1:11, 1:12)# 
 margins <- rep(x = 0.9, times = length(subspaces))
-dependency.list <- c("Cross", "Hourglass")
-plot.iihs.slow <- makeBenchmarkPlot.isInHiddenSpace(subspaces = subspaces, margins = margins,
+dependency.list <- c("Linear", "Wall", "Square", "Donut","Cross", "Hourglass")# 
+system.time(plot.iihs.slow <- makeBenchmarkPlot.isInHiddenSpace(subspaces = subspaces, margins = margins,
                                                dependency.list = dependency.list, unit = "s",
-                                               times = 5)
+                                               times = 30))
+plot.iihs.slow
 
 subspaces <- list(1:2, 1:3)#, 1:6, 1:7, 1:8, 1:9, 1:10)
 margins <- rep(x = 0.9, times = length(subspaces))
 dependency.list <- c("Sine")
-plot.iihs.sine <- makeBenchmarkPlot.isInHiddenSpace(subspaces = subspaces, margins = margins,
+system.time(plot.iihs.sine <- makeBenchmarkPlot.isInHiddenSpace(subspaces = subspaces, margins = margins,
                                                dependency.list = dependency.list, unit = "ms",
-                                               times = 5)
-
+                                               times = 5))
+plot.iihs.sine
 
 
 
