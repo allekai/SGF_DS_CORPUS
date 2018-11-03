@@ -81,7 +81,7 @@ makeCorrelationPlot.2D <- function(stream,
     ggplot(m, aes(x=index, y=variable, fill=value)) +
         geom_raster() +
         xlab("Window Index") +
-        ylab("Correlation Measue") +
+        ylab("Correlation Measure") +
         theme(plot.title = element_text(hjust = 0.5)) + 
         ggtitle(sprintf("Heatmap of Correlation Measures with window size %i", size)) +
         labs(caption=paste(prefix, suffix), sep=" ")

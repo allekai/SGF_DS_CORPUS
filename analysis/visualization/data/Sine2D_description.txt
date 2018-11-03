@@ -1,0 +1,61 @@
+Synthetic Data Stream
+=====================
+
+Parameters
+----------
+
+Number of steps:	 5
+Proportion of outliers:	 0.01
+Proportion type:	 proportional
+Number of Dimensions:	 10
+Minimum number of dim:	 2
+Maximum number of dim:	 2
+Possible margin values:	 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9
+Cycle length:		 0
+Volatility:		 0.1
+Dependency:		 Sine
+Overlap Allowed:		 
+Discrete:		 0
+
+Data
+----
+
+Number of points:	 5000
+Number of outliers:	 14 
+
+- Contingency Table
+
+  subspaces count
+1       1,2    14
+
+- Patterns
+
+Index		Subspaces
+1032		1,2		
+1173		1,2		
+1285		1,2		
+1314		1,2		
+1325		1,2		
+1587		1,2		
+1887		1,2		
+2039		1,2		
+2262		1,2		
+3358		1,2		
+4594		1,2		
+4655		1,2		
+4903		1,2		
+4961		1,2		
+
+Subspace description
+--------------------
+
+- Notes
+
+Rows:		subspaces (<start>:<end>)
+Columns:	<step_number>.<step_size>
+Values:		 0 ='no dependence', 0.9='high dependence'
+
+- Description
+
+    1.1000 2.1000 3.1000 4.1000 5.1000
+1:2    0.9    0.5    0.1    0.5    0.9
