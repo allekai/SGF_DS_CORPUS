@@ -203,8 +203,8 @@ makeBenchmarkPlot.constructPoint.Single <- function(n.list = seq(1000, 5000, 100
   result.plots <- list()
   result.plots$Raw <- ggplot(m, aes(x = N, y = value, group=variable,
                                     color=variable)) + geom_line(size=0.8) +
-    xlab("Number of runs") + ylab(paste("Time in", unit)) +
-    ggtitle("Average time of single constructPoint run") +
+    xlab("Index") + ylab(paste("Time in", unit)) +
+    ggtitle("Time of single constructPoint run") +
     theme(plot.title = element_text(hjust = 0.5)) +
     facet_wrap(~variable, scales = "free")
   #ylim(0, max(m$value))

@@ -1,0 +1,81 @@
+Synthetic Data Stream
+=====================
+
+Parameters
+----------
+
+Number of steps:	 5
+Proportion of outliers:	 0.01
+Proportion type:	 proportional
+Number of Dimensions:	 10
+Minimum number of dim:	 5
+Maximum number of dim:	 5
+Possible margin values:	 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9
+Cycle length:		 0
+Volatility:		 0.1
+Dependency:		 Donut
+Overlap Allowed:		 
+Discrete:		 0
+
+Data
+----
+
+Number of points:	 5000
+Number of outliers:	 34 
+
+- Contingency Table
+
+  subspaces count
+1 1,2,3,4,5    34
+
+- Patterns
+
+Index		Subspaces
+114		1,2,3,4,5		
+122		1,2,3,4,5		
+262		1,2,3,4,5		
+446		1,2,3,4,5		
+570		1,2,3,4,5		
+1520		1,2,3,4,5		
+1671		1,2,3,4,5		
+1818		1,2,3,4,5		
+1845		1,2,3,4,5		
+1853		1,2,3,4,5		
+1862		1,2,3,4,5		
+1939		1,2,3,4,5		
+2093		1,2,3,4,5		
+2225		1,2,3,4,5		
+2276		1,2,3,4,5		
+2860		1,2,3,4,5		
+2863		1,2,3,4,5		
+2933		1,2,3,4,5		
+3123		1,2,3,4,5		
+3170		1,2,3,4,5		
+3172		1,2,3,4,5		
+3230		1,2,3,4,5		
+3283		1,2,3,4,5		
+3323		1,2,3,4,5		
+3346		1,2,3,4,5		
+3715		1,2,3,4,5		
+3838		1,2,3,4,5		
+3914		1,2,3,4,5		
+4047		1,2,3,4,5		
+4256		1,2,3,4,5		
+4329		1,2,3,4,5		
+4458		1,2,3,4,5		
+4708		1,2,3,4,5		
+4854		1,2,3,4,5		
+
+Subspace description
+--------------------
+
+- Notes
+
+Rows:		subspaces (<start>:<end>)
+Columns:	<step_number>.<step_size>
+Values:		 0 ='no dependence', 0.9='high dependence'
+
+- Description
+
+    1.1000 2.1000 3.1000 4.1000 5.1000
+1:5    0.9    0.5    0.1    0.5    0.9
