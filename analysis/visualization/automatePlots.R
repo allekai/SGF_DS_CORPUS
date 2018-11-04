@@ -1,15 +1,3 @@
-dependency.list <- c("Linear",
-                     "Wall",
-                     "Square",
-                     "Donut",
-                     "Hourglass",
-                     "Cross",
-                     "Sine")
-source("visualizationMethods.R")
-
-stream.list <- list()
-correlation.list <- list()
-plot.list <- list()
 
 populateLists <- function() {
     for (dep in dependency.list) {
@@ -30,9 +18,10 @@ populateLists <- function() {
                                                 "kendall",
                                                 "pearson"),
                                       size=100))
-        stream.list <- list.append(stream.list, get(stream.name))
-        correlation.list <- list.append(correlation.list, get(correlation.name))
-        plot.list <- list.append(plot.list, get(plot.name))
+        # asign to global variable
+        stream.list <<- list.append(stream.list, get(stream.name))
+        correlation.list <<- list.append(correlation.list, get(correlation.name))
+        plot.list <<- list.append(plot.list, get(plot.name))
         ggsave(filename=paste(plot.name,".pdf",collaps="",sep=""),
                plot=get(plot.name), device="pdf",
                path="plots/",
@@ -44,17 +33,40 @@ populateLists <- function() {
         output.stream(get(stream.name), paste(dep, "2D", collapse="",sep=""))
         setwd("../")
     }
-}
-
-generateFacetPlotFromAllStreams <- function() {
-    names(correlation.list) <- dependency.list
+    names(correlation.list) <<- dependency.list
     for (dep in names(correlation.list)) {
-        correlation.list[[dep]] <- data.frame(cbind(correlation.list[[dep]],
+        correlation.list[[dep]] <<- data.frame(cbind(correlation.list[[dep]],
                                                   dep))
     }
-    df <- do.call(rbind, correlation.list)
-    m <- melt(df, id.vars = c("index", "dep"),
-              measure.vars = c("spearman", "kendall", "pearson"))
+}
+
+coerceCorrelationLists <- function(correlation.list = NULL, madeSplits = FALSE) {
+    if (is.null(correlation.list)) stop("Need correlation list!")
+    if (!madeSplits) stop("Run the makeSplits.sh first!")
+    files <- list.files(path="data/", pattern="^.*\\.csv$")
+    for (file in files) {
+        f <- read.csv(paste("data/",file, collapse="", sep=""),
+                      stringsAsFactors = FALSE)
+        curr.Dep <- switch(substr(file, 1, 3),
+                           "Lin" = "Linear",
+                           "Wal" = "Wall",
+                           "Squ" = "Square",
+                           "Don" = "Donut",
+                           "Hou" = "Hourglass",
+                           "Cro" = "Cross",
+                           "Sin" = "Sine")
+        correlation.list[[curr.Dep]] <- data.frame(cbind(f, correlation.list[[curr.Dep]]))
+    }
+    correlation.list
+}
+
+generateFacetPlotFromAllStreams <- function(corr.list) {
+    for (dep in dependency.list) {
+        corr.list[[dep]]$II <- abs(corr.list[[dep]]$II / (max(corr.list[[dep]]$II) - min(corr.list[[dep]]$II)))
+        corr.list[[dep]]$TC <- abs(corr.list[[dep]]$TC / (max(corr.list[[dep]]$TC) - min(corr.list[[dep]]$TC)))
+    }
+    df <- do.call(rbind, corr.list)
+    m <- melt(df, id.vars = c("index", "dep"))
     m[["value"]] <- abs(m[["value"]])
     source("facetPlot.R")
     facet.plot <-  makeFacetPlotStreamVisualization.2D(m)
@@ -62,7 +74,15 @@ generateFacetPlotFromAllStreams <- function() {
            plot=facet.plot,
            path="plots/",
            device="pdf",
-           height = 10,
+           height = 20,
+           width = 15,
+           units="cm")
+    facet.plot.2 <-  makeFacetPlotStreamVisualization.2D.transposed(m)
+    ggsave(filename="correlationFacetPlot2.pdf",
+           plot=facet.plot.2,
+           path="plots/",
+           device="pdf",
+           height = 20,
            width = 15,
            units="cm")
 }

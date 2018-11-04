@@ -39,4 +39,5 @@ do
         cat data_splits/${file:0:3}/heading.txt | cat - $dat > temp && mv temp $dat
     done
     cat heading.txt | cat - $file > temp && mv temp $file
+    rm heading.txt
 done

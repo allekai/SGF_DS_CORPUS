@@ -21,23 +21,24 @@ Data
 ----
 
 Number of points:	 5000
-Number of outliers:	 7 
+Number of outliers:	 8 
 
 - Contingency Table
 
   subspaces count
-1       1,2     7
+1       1,2     8
 
 - Patterns
 
 Index		Subspaces
-866		1,2		
-1012		1,2		
-1161		1,2		
-1322		1,2		
-1482		1,2		
-4681		1,2		
-4846		1,2		
+601		1,2		
+2141		1,2		
+4175		1,2		
+4285		1,2		
+4600		1,2		
+4716		1,2		
+4806		1,2		
+4974		1,2		
 
 Subspace description
 --------------------
