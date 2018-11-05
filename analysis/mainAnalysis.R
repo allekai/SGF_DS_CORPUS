@@ -23,14 +23,14 @@ if(!dir.exists(registry.path)) {
 }
 
 
-'data.stream.static.list <- c("Sta10N5000Lin2Mar01NumSub2Pro05Con",
-                             "Sta10N5000Wal2Mar01NumSub2Pro05Con",
-                             "Sta10N5000Squ2Mar01NumSub2Pro05Con",
-                             "Sta10N5000Don2Mar01NumSub2Pro05Con",
-                             "Sta10N5000Cro2Mar01NumSub2Pro05Con",
-                             "Sta10N5000Hou2Mar01NumSub2Pro05Con",
-                             "Sta10N5000Sin2Mar01NumSub2Pro05Con")
-'
+#data.stream.static.list <- c("Sta10N5000Lin2Mar01NumSub2Pro05Con",
+#                             "Sta10N5000Wal2Mar01NumSub2Pro05Con",
+#                             "Sta10N5000Squ2Mar01NumSub2Pro05Con",
+#                             "Sta10N5000Don2Mar01NumSub2Pro05Con",
+#                             "Sta10N5000Cro2Mar01NumSub2Pro05Con",
+#                             "Sta10N5000Hou2Mar01NumSub2Pro05Con",
+#                             "Sta10N5000Sin2Mar01NumSub2Pro05Con")
+
 tmp <- list.files("selected_data/", pattern = "data.txt$", recursive = T, full.names = T)
 static.streams <- lapply(tmp, read.csv)  # outlier label as "class"
 
